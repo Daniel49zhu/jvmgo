@@ -5,6 +5,7 @@ import (
 	"path/filepath"
 )
 
+//代表目录形式的类路径
 type DirEntry struct {
 	absDir string
 }
@@ -12,6 +13,7 @@ type DirEntry struct {
 func newDirEntry(path string) *DirEntry {
 	absDir, err := filepath.Abs(path)
 	if err != nil {
+		//调用panic会终止当前方法
 		panic(err)
 	}
 	return &DirEntry{absDir}
