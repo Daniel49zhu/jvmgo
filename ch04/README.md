@@ -98,5 +98,4 @@ ch03.exe test
 
 ----
 
-第四章介绍了运行时数据取，初步实现了Thread，Stack，Frame，OperandStack和LocalVars等线程私有的运行时数据区。
-
+第四章介绍了运行时数据取，初步实现了Thread，Stack，Frame，OperandStack和LocalVars等线程私有的运行时数据区。 
