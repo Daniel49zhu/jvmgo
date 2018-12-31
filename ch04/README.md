@@ -88,3 +88,10 @@ fload_2指令把#2号局部变量推入操作数栈顶
 ![step10](images/step10.jpg "第十步")
 
 最后freturn指令把操作数栈顶的float变量弹出，返回给方法调用者
+
+---
+-  测试
+
+go install jvmgo/ch04
+
+ch03.exe test
