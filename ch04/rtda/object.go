@@ -1,5 +1,5 @@
 package rtda
 
 type Object struct {
-	//TODO
+	// todo
 }
