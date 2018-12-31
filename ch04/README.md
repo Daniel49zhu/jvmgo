@@ -1,4 +1,4 @@
-###运行时数据区
+### 运行时数据区
 - 多线程共享
 
     主要存放类数据和类的实例（对象），对象存在于堆（Heap）中，
@@ -21,13 +21,15 @@
      
      -----
      
-     
+     ```
      public static float circumference(float r) {
         float pi = 3.14f;
         float area = 2 * pi * r;
         return area;
      }
+     ```
      
+     ```
      00 ldc #4
      02 fstore_1
      03 fconst_2
@@ -38,6 +40,7 @@
      08 fstore_2
      09 fload_2
      10 return
+     ```
      ------
      
 ![Init](images/init.jpg "帧的初始状态")
