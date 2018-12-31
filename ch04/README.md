@@ -57,3 +57,31 @@ circumference（）方法的局部变量
 ![step3](images/step3.jpg "第三步")
   
 fconst_2指令把2.0f推到栈顶
+
+![step4](images/step4.jpg "第四步")
+
+fload_1指令把#1号局部变量推入栈顶
+
+![step5](images/step5.jpg "第五步")
+
+fmul继续乘法计算，它把栈顶的两个浮点数弹出，相乘，然后把结果推入栈顶，
+
+![step6](images/step6.jpg "第六步")
+
+fload_0指令把#0号局部变量推入栈顶，
+
+![step7](images/step7.jpg "第七步")
+
+fmul继续乘法计算，
+
+![step8](images/step8.jpg "第八步")
+
+fstore_2指令把操作数栈顶的float值弹出，放入#2号局部变量表
+
+![step9](images/step9.jpg "第九步")
+
+fload_2指令把#2号局部变量推入操作数栈顶
+
+![step10](images/step10.jpg "第十步")
+
+最后freturn指令把操作数栈顶的float变量弹出，返回给方法调用者
