@@ -18,7 +18,7 @@ javaw [-options] -jar jarfile [args]
 
 [cmd.go](cmd.go)
 
-go提供的os包里定义了一个Args便俩个，其存放了传递给命令行参数的全部参数，直接处理Args变量会需要大量处理，
+go提供的os包里定义了一个Args变量，其存放了传递给命令行参数的全部参数，直接处理Args变量会需要大量处理，
 而flag包可以保暖关注我们处理命令行选项。parseCmd方法处理了-?/-help,-cp/-classpath,-version三种选项，并将之后所有参数
 封装进了cmd.class和cmd.args两个参数中
 

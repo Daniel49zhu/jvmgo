@@ -2,7 +2,7 @@
 ---- 
 [第1章](ch01/README.md) 命令行工具
 
-[第2章](ch02/README.md)
+[第2章](ch02/README.md) 搜索class文件
 
 [第3章](ch03/README.md)
 
