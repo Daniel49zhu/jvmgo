@@ -28,6 +28,9 @@ func (self *Classpath) parseBootAndExtClasspath(jreOption string) {
 	self.extClasspath = newWildcardEntry(jreExtPath)
 }
 
+//优先使用用户输入的-Xjre选项作为jre目录。如果没有输入该
+//选项，则在当前目录下寻找jre目录。如果找不到，尝试使用
+//JAVA_HOME环境变量
 func getJreDir(jreOption string) string {
 	if jreOption != "" && exists(jreOption) {
 		return jreOption
