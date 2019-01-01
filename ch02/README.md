@@ -36,6 +36,18 @@ java.lang.String和java.lang.String[]类等等，本章将讨论java虚拟机是
     
     - [entry_wildcard.go](classpath/entry_wildcard.go) WildcardEntry实际上也是CompositeEntry，所以就不再定义新的类型了。
     
+    - [classpath.go](classpath/classpath.go) Classpath结构体有三个字段，分别代表三种类型的路径。Parse()函数使用-Xjre选项来解析启动类路径和扩展类路径，
+    使用-classpath/-cp 来解析用户类路径
+    
+- 测试
+    ![结果](images/result.jpg "测试结果") 
+    目前已经能读取class文件的数据，只不过仍是二进制
+- 小结
+    
+    本章已经能够成功读取class文件，对类路径和classpath命令行选项有了较为深入的了解，并且把抽象的类路径概念转变成了具体的代码。下一章将研究class文件格式，实现class文
+    件解析。
+ 
+    
     
     
     
