@@ -7,10 +7,12 @@ import (
 	"path/filepath"
 )
 
+//存放的是Zip或Jar文件的绝对路径
 type ZipEntry struct {
 	absPath string
 }
 
+//构造函数
 func newZipEntry(path string) *ZipEntry {
 	absPath, err := filepath.Abs(path)
 	if err != nil {
@@ -20,7 +22,7 @@ func newZipEntry(path string) *ZipEntry {
 }
 
 func (self *ZipEntry) readClass(className string) ([]byte, Entry, error) {
-	r, err := zip.OpenReader(self.absPath)
+	r, err := zip.OpenReader(self.absPath) //根据绝对路径来读取zip类型的文件
 	if err != nil {
 		return nil, nil, err
 	}

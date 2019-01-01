@@ -5,7 +5,7 @@ import (
 	"path/filepath"
 )
 
-//代表目录形式的类路径
+//代表目录形式的类路径（绝对路径）
 type DirEntry struct {
 	absDir string
 }
@@ -25,6 +25,7 @@ func (self *DirEntry) readClass(className string) ([]byte, Entry, error) {
 	return data, self, err
 }
 
+//直接返回目录
 func (self *DirEntry) String() string {
 	return self.absDir
 }
