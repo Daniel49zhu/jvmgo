@@ -24,15 +24,15 @@ ClassFile {
 */
 type ClassFile struct {
 	//magic      uint32
-	minorVersion uint16 //次版本号
-	majorVersion uint16 //主版本号
-	constantPool ConstantPool
-	accessFlags  uint16
-	thisClass    uint16
-	superClass   uint16
-	interfaces   []uint16
-	fields       []*MemberInfo
-	methods      []*MemberInfo
+	minorVersion uint16        //次版本号
+	majorVersion uint16        //主版本号
+	constantPool ConstantPool  //常量池
+	accessFlags  uint16        //类访问标志
+	thisClass    uint16        //类名索引
+	superClass   uint16        //超类名索引
+	interfaces   []uint16      //接口索引表
+	fields       []*MemberInfo //字段
+	methods      []*MemberInfo //方法表
 	attributes   []AttributeInfo
 }
 
