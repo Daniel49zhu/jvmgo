@@ -24,8 +24,8 @@ ClassFile {
 */
 type ClassFile struct {
 	//magic      uint32
-	minorVersion uint16
-	majorVersion uint16
+	minorVersion uint16 //次版本号
+	majorVersion uint16 //主版本号
 	constantPool ConstantPool
 	accessFlags  uint16
 	thisClass    uint16
