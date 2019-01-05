@@ -81,7 +81,59 @@ ClassFile {
    
    Java SE8向下兼容到45.0-52.0的class文件，如果遇到不支持的版本号就会抛出java.lang.UnsupportedClassVersionError异常。
 
+    - 类访问标志
     
+    版本号之后是常量池，暂时放到下一节单独介绍。常量池之后是类访问标志，这是一个16位的"bitmask"，指出class文件定义
+    的是类还是接口，访问级别是public还是private等等。本章只是读取，第六章会详细讨论访问标志。
+    
+    - 类和超类索引
+    
+    类访问标志之后是两个u2类型的常量池索引，分别给出类名和超类名。class文件存储的类名类似完全限定名，
+    但是把点换成了斜线，Java语言规范把这种名字叫做二进制名(binary names)。因为每个类都有名字，所以thisClass必须是
+    有效的常量池索引。除java.lang.Object之外，其他类都有超类，所以superClass只在Object.class中是0，在其他class
+    文件中必须是常量池索引。
+    
+    - 接口索引表
+    
+    类和超类索引后面是接口索引表，存放的也是常量池索引，给出的是该类实现的所有接口的名字。
+    
+    - 字段和方法表
+    
+    接口索引表之后是字段表和方法表，分别存储字段和方法信息。字段和方法的基本结构大致相同，差别仅在于属性表。
+    Java虚拟机规范给出的字段结构定义
+```
+    field_info {
+        u2             access_flags;
+        u2             name_index;
+        u2             descriptor_index;
+        u2             attributes_count;
+        attribute_info attributes[attributes_count];
+    }
+```
+    
+  和类一样，字段和方法也有自己的访问标志。访问标志之后是一个常量池索引，给出字段名或方法名，然后又是一个
+  常量池索引，给出字段或方法的描述符，最后是属性表。[member_info.go](classfile/member_info.go)定义了MemberInfo
+  结构体
+  
+- 解析常量池
+
+    常量池占据了class文件很大的一部分数据，里面存放着各种各样的常量信息，包括数字和字符串常量、类
+    和接口名、字段和方法名等等。
+    
+    - ConstantPool结构体
+    
+    [constant_pool.go](classfile/constant_pool.go),常量池实际上是一个表，但有三点需要注意。
+    
+    第一，表头给出的常量池大小比实际大1。假如表头给出的值是n，那么常量池的实际大小是n-1。
+    
+    第二，有效的常量池索引是1~n-1。0是无效索引，表示不指向任何常量。
+    
+    第三，Constant_long_info和Constant_double_info各占两个位置。也就是说，如果常量池中存在这两种常量，实际的常量比n-1还要少，而且1~n-1的某些数也会无效索引。
+    
+    - ConstanInfo接口
+    
+    由于常量池中存放的信息各不相同，所以每种常量的格式也不同。常量数据的第一字节是tag，用来区分常量类型。
+    Java虚拟机规范一共定义了14种常量。[constant_info.go](classfile/constant_info.go)
 
     
     
