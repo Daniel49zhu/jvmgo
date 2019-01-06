@@ -185,6 +185,8 @@ ClassFile {
     
 - 测试本章代码
 
+    ![测试](images/test.jpg "测试代码")
+
     
     
     
