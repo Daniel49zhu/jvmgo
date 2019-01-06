@@ -134,6 +134,56 @@ ClassFile {
     
     由于常量池中存放的信息各不相同，所以每种常量的格式也不同。常量数据的第一字节是tag，用来区分常量类型。
     Java虚拟机规范一共定义了14种常量。[constant_info.go](classfile/constant_info.go)
+    
+- 解析属性表
+    
+    - AttributeInfo接口
+      
+    和常量池类似，各种属性表达的信息也各不相同，因此无法使用统一的结构体来定义。而且因为Java虚拟机规范定义的属性一共只有14种，
+    而属性是可以扩展的，因此使用属性名来区别不同的属性，属性数据放在属性名之后的u1表中，这样java虚拟机可以跳过自己无法识别的属性。
+    ```
+        attribute_info {
+            u2 attribute_name_index;
+            u4 attribute_length;
+            u1 info[attribute_length];
+        }
+    ```
+    java虚拟机预定了23种属性，按照用途，23种预定义属性可以分为三组。
+    第一组属性是实现Java虚拟机所必须的，共有5种。第二组属性是Java类库所必须的，共有12种。第三组属性主要一共给工具使用，共有6种。
+    JDK1.0只有6种预定义属性，JDK1.1增加了3种，J2SE 5.0增加了9种，主要用于支持泛型和注解。Java SE6增加了StackMapTable属性，
+    用于优化字节码验证。Java SE7增加了BootstrapMethods属性，用于支持新增的invokeddynamic指令，Java SE8又增加了三种属性,
+    只介绍其中八种属性
+
+    ![属性表](images/attr.jpg "属性表")
+    
+    - Deprecated和Synthetic属性
+            
+    Deprecated和Synthetic是最简单的两种属性，仅起标记作用，不包含任何数据。Deprecated用于指出类、接口、字段或方法已经
+    不建议使用，编译器可以根据Deprecated属性输出警告信息。
+    Synthetic属性用来标记源文件中不存在、由编译器生成的类成员，引入Synthetic属性是为了支持嵌套类和嵌套接口。
+    
+    - SourceFile属性
+    
+    SourceFile是可选定长属性，只会出现在ClassFile结构中，用于指出源文件名
+    
+    - ConstantValue属性
+    
+    定长属性，只会出现在filed_info结构中，用于表示常量表达式的值。
+    
+    - Code属性
+    
+    变长属性，只存在与method_info结构中。COde属性中存放字节码等方法相关信息。
+    
+    - Exceptions属性
+    
+    变长属性，记录方法抛出的异常表
+    
+    - LineNumberTable和LocalVariableTable属性
+    
+    LineNumberTable属性表存放方法的行号信息，LocalVariableTable属性表中存放方法的局部变量信息。这两种属性和前面的SourceFile都属于
+    调试信息，都不是运行时所必需的。
+    
+- 测试本章代码
 
     
     
