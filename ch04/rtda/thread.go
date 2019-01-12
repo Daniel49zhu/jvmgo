@@ -15,6 +15,7 @@ type Thread struct {
 	// todo
 }
 
+//暂时将栈的大小设置为1024，可以手动在cmd中添加选项来手动指定这个参数（java提供了-Xss来指定虚拟机栈的大小）
 func NewThread() *Thread {
 	return &Thread{
 		stack: newStack(1024),
