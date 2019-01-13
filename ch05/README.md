@@ -152,3 +152,35 @@
     type LSTORE_3 struct{ base.NoOperandsInstruction }
     ```
     lstore指令的索引来自操作数，其余四条的索引隐含在操作码中
+    
+- 栈指令
+
+    栈指令直接对操作数进行操作，共9条：pop和pop2指令将栈顶变量弹出，dup系列指令复制栈顶变量，swap指令
+    交换栈顶的两个变量。
+   
+    和其他指令不同，栈指令并不关心变量类型。为了实现栈指令，需要给OperandStack结构体添加两个方法。在
+    [operand_stack.go](rtda/operand_stack.go)中定义PushSlot()和PopSlot()方法，
+    ```
+    func (self *OperandStack) PushSlot(slot Slot) {
+        self.slots[self.size] = slot
+        self.size++
+    }
+    func (self *OperandStack) PopSlot() Slot {
+        self.size--
+        return self.slots[self.size]
+    }
+    ```
+    
+    - pop和pop2指令
+    
+      在/instructions/stack中新建[pop.go](instructions/stack/pop.go),pop只能弹出int、float等占用一个操作数栈
+      的变量，double和long变量需要使用pop2指令弹出
+      
+   - dup指令
+   
+     创建[dup.go](instructions/stack/dup.go),dup指令复制栈顶的单个变量，dup2复制栈顶的两个变量
+     
+  - swap指令
+  
+   创建[swap.go](instructions/stack/swap.go),swap指令会交换栈顶的两个变量
+   
