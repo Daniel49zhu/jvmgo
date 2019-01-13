@@ -94,7 +94,7 @@
     
     - nop指令
     
-    [constants/nop.go](instructions/constants/nop.go) 最简单的一条指令，什么也不做
+    [nop.go](instructions/constants/nop.go) 最简单的一条指令，什么也不做
     
     - const系列指令
     
@@ -118,3 +118,37 @@
         }
     ```
     
+    - bipush和sipush指令
+    
+    bipush指令从操作数中获取一个byte型整数，扩展成int型，然后推入栈顶。sipush指令从操作数中获取一个short型整数扩展成int型，然后推入栈顶。
+    在instructions\constants下新建[ipush.go]
+    
+- 加载指令
+    
+    加载指令从局部变量表获取变量，然后推入操作数栈顶。加载指令共33条，按照所操作的变量类型分为6类，aload系列
+    操作引用类型变量、dload系列操作double类型变量、fload系列操作float变量、iload系列操作int变量、lload系列操作long变量、xaload操
+    作数组。本节实现其中的25条，数组相关在第8章实现。下面以iload为例介绍加载指令
+    
+    在instructions/loads目录下新建[iload.go](instructions/loads/iload.go),在其中定义五条指令,iload的索引来自操作数，其余四条
+    来自操作码中，代表要从局部变量表中获取第几个变量
+    ```
+    type ILOAD struct{ base.Index8Instruction }
+    type ILOAD_0 struct{ base.NoOperandsInstruction }
+    type ILOAD_1 struct{ base.NoOperandsInstruction }
+    type ILOAD_2 struct{ base.NoOperandsInstruction }
+    type ILOAD_3 struct{ base.NoOperandsInstruction }
+    ```
+    
+- 存储指令
+    
+    存储指令是把变量从操作数栈顶弹出，放入局部变量表中，正好和加载指令相反。存储指令也分为6类，以lstore系列
+    指令为例进行介绍，在instructions/stores目录下创建[lstore.go](instructions/stores/lstore.go)，在其中包含了5
+    条指令，如下
+    ```
+    type LSTORE struct{ base.Index8Instruction }
+    type LSTORE_0 struct{ base.NoOperandsInstruction }
+    type LSTORE_1 struct{ base.NoOperandsInstruction }
+    type LSTORE_2 struct{ base.NoOperandsInstruction }
+    type LSTORE_3 struct{ base.NoOperandsInstruction }
+    ```
+    lstore指令的索引来自操作数，其余四条的索引隐含在操作码中
