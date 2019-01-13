@@ -35,5 +35,86 @@
     出现在class文件中。
     
     本章会实现11类中的9类，在本章讨论native方法时会用到保留指令impdep1指令，引用指令分布在第6，7，8，10章中。为了方便管理，
-    我们将新建instructions目录并有10个子目录
+    我们将新建instructions目录并有10个子目录。
+    
+- 指令和指令解码
+
+    Java虚拟机规范介绍了Java虚拟机的大致逻辑，如下
+    ```
+      do {
+        atomically calculate pc and fetch opcode at pc;
+        if (operands) fetch operands;
+        execute the action for the opcode;
+      } while (there is more to do);
+    ```
+    大致逻辑包含:计算pc，指令解码，指令执行，用go来实现代码大致如下：
+    ```
+      for {
+        pc := calculatePC()
+        opcode := bytecode[pc]
+        inst := createInst(opcode)
+        inst.fetchoperands(bytecode)
+        inst.execute()
+     }
+    ```
+    
+    - Instruction接口
+    
+    [instruction.go](instructions/base/instruction.go),FetchOperands()方法从字节码中提取操作数，
+    Execute()方法执行指令逻辑。有很多指令的操作数都是类似的，为了避免重复代码，按照操作数
+    类型定义一些结构体，并实现了FetchOperands()方法。相当于Java中的抽象类。
+    
+    NoOperandsInstruction表示没有操作数的指令，所以其对应的FetchOperands()方法实现也是空的。
+    
+    BranchInstruction结构体表示跳转指令，Offset字段存放跳转偏移量。FetchOperands()方法从中字节码中
+    读取一个uint16证书，转成int后赋给Offset字段。
+                    
+    存储和加载类指令需要根据索引存取局部变量表，索引由单子接操作数给出。这类指令抽象成Index8Instruction结构体，
+    用Index字段表示局部变量表索引。FetchOperands()方法从字节码中读取一个int8整数，转成uint后赋给Index字段。
+    
+    有一些指令需要访问运行时常量池，常量池索引由两字节操作数给出。把这类指令抽象成Index16Instruction结构体，
+    用Index字段表示常量池索引。Fetchoperands()方法从字节码中读取一个uint16整数，转成uint后赋给Index字段。
+    
+    - BytecodeReader
+    
+    [bytecode_reader.go](instructions/base/bytecode_reader.go)中定义了BytecodeReader结构体，code字段存放字节码，
+    pc字段记录读取到了哪个字节。为了避免每次解码指令都新创建一个BytecodeReader为实例，定义一个Reset()方法。
+    
+    还需要定义两个方法：ReadInt32s()和SkipPadding()。这两个方法只有tableswitch和lookupswitch指令使用，介绍这两条指令
+    时再给出代码。
+    
+    在接下来的9个小节中，将要按照分类依次实现150条指令，虽然数目众多，但是指令很多类似，比图iload、lload、fload、dload和
+    aload这5条，除了操作的数据不同，代码几乎相同。
+    
+    
+- 常量指令
+
+    常量指令把常量推入操作数栈顶。常量可以来自三个地方：隐含在操作码里、操作数和运行时常量池。常量指令共有21条。本节实现
+    其中18条，另外三条ldc系列指令用于从运行时常量池加载常量将在第6章介绍。
+    
+    - nop指令
+    
+    [constants/nop.go](instructions/constants/nop.go) 最简单的一条指令，什么也不做
+    
+    - const系列指令
+    
+    这一系列指令把隐含在操作码中的常量值推入操作数栈顶。在instruction\constants目录下创建[const.go](instructions/constants/const.go)文件，
+    在其中定义15条指令。account_null指令把null引用推入操作数栈顶
+    ```
+        func (self *ACONST_NULL) Execute(frame *rtda.Frame) {
+            frame.OperandStack().PushRef(nil)
+        }
+    ```
+    dconst_0指令把double型0推入操作数栈顶
+    ```
+        func (self *DCONST_0) Execute(frame *rtda.Frame) {
+            frame.OperandStack().PushDouble(0.0)
+        }
+    ```
+    iconst_m1指令把int型-1推入操作数栈顶
+    ```
+        func (self *ICONST_M1) Execute(frame *rtda.Frame) {
+            frame.OperandStack().PushInt(-1)
+        }
+    ```
     
