@@ -184,3 +184,52 @@
   
    创建[swap.go](instructions/stack/swap.go),swap指令会交换栈顶的两个变量
    
+- 数学指令
+  
+  大致对应的Java语言中的加减乘除等数学运算符，数学指令包括算术指令、位移指令和布尔运算指令等，共37条，
+  将全部在本节实现。
+  
+  - 算术指令
+  
+  可以细分为加法(add)指令、减法(sub)指令、乘法(mul)指令、除法(div)指令、求余(rem)指令和取反(neg)指令六种
+  以求余指令为例[rem.go](instructions/math/rem.go),先从操作数栈中弹出两个int变量，求余，然后把结果推操作数栈。
+  
+  - 位移指令
+  
+  位移指令可以分为左移和右移两种，右移又可以分为无符合（逻辑）右移和有符合（算术）右移，在instructions\math\下创建
+  [sh.go](instructions/math/sh.go),在其中定义了6条位移指令
+  ```
+    // int左移
+    type ISHL struct{ base.NoOperandsInstruction }
+    // int算术右移
+    type ISHR struct{ base.NoOperandsInstruction }
+    // int逻辑右移
+    type IUSHR struct{ base.NoOperandsInstruction }
+    // long左移
+    type LSHL struct{ base.NoOperandsInstruction }
+    // long算术右移
+    type LSHR struct{ base.NoOperandsInstruction }
+    // long逻辑右移
+    type LUSHR struct{ base.NoOperandsInstruction }
+  ```
+  
+  - 布尔运算指令
+  
+  布尔运算指令只能用于操作int和long变量，分为按位与(and)、按位或（or）、按位异或（xor）三种。
+  以按位与为例介绍布尔运算指令。在instructions/math下创建[and.go](instructions/math/and.go)
+  
+  - iinc指令
+  
+  iinc指令给局部变量表中的int变量增加常量值，局部变量索引和常量值都由指令的操作数提供。
+  在instruction/math下创建[iinc.go](instructions/math/iinc.go)
+  
+- 类型转换指令
+
+    类型转换指令大致对应Java语言中的基本类型强制类型转换操作。类型转换指令共有15条，将全部实现。
+    引用类型的转换对应的checkcast指令将在第6章实现。
+    
+    按照被转换变量的类型，类型转换指令可以分为3种
+  
+  
+  
+   
