@@ -228,7 +228,18 @@
     类型转换指令大致对应Java语言中的基本类型强制类型转换操作。类型转换指令共有15条，将全部实现。
     引用类型的转换对应的checkcast指令将在第6章实现。
     
-    按照被转换变量的类型，类型转换指令可以分为3种
+    按照被转换变量的类型，类型转换指令可以分为3种：i2x系列指令把int变量强制转换成其他类型；l2x系列指令
+    把long变量强制转换成其他类型；f2x系列指令把float变量强制转换成其他类型；d2x系列指令把double变量强制
+    转换成其他类型。以d2x系列指令为例进行讨论。
+    
+    在ch05/instructions/conversions下创建[d2x.go](instructions/conversions/d2x.go),在其中定了d2f、d2i、d2l指令
+    ```
+    type D2F struct{ base.NoOperandsInstruction }
+    
+    type D2I struct{ base.NoOperandsInstruction }
+    
+    type D2L struct{ base.NoOperandsInstruction }
+    ```
   
   
   
