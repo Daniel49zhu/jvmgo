@@ -240,6 +240,113 @@
     
     type D2L struct{ base.NoOperandsInstruction }
     ```
+    
+- 比较指令
+
+    比较指令可以分为两类，一类将比较结果i推入操作数栈顶，一类根据比较结果跳转。比较指令是编译器实现
+    if-else，for，while等语句的基石，共19条，将在本节全部实现。
+    
+    - lcmp指令
+    
+    用于比较long变量。在ch05/instructions/comparisons目录下创建[lcmp.go](instructions/comparisons/lcmp.go)文件，在其中定义lcmp指令
+    Execute()方法把栈顶的两个long变量弹出，进行比较，然后把比较结果（int型0、1或-1）推入栈顶
+    ```
+        func (self *LCMP) Execute(frame *rtda.Frame) {
+            stack := frame.OperandStack()
+            v2 := stack.PopLong()
+            v1 := stack.PopLong()
+            if v1 > v2 {
+                stack.PushInt(1)
+            } else if v1 == v2 {
+                stack.PushInt(0)
+            } else {
+                stack.PushInt(-1)
+            }
+        }
+
+    ```
+    
+    - fcmp<op>和dcmp<op>指令
+    
+    fcmpg和fcmpl指令用于比较float变量。在ch05\instructions\comparisons目录下创建[fcmp.go](instructions/comparisons/fcmp.go)文件,
+    在其中定义fcmpg和fcmpl指令
+    ```
+    // Compare float
+    type FCMPG struct{ base.NoOperandsInstruction }
+    
+    type FCMPL struct{ base.NoOperandsInstruction }
+    ```
+    
+    在比较两个浮点数时，除了大于等于和等于之外，还存在第4种结果：无法比较。编写一个函数来统一比较float变量
+    ```
+    func _fcmp(frame *rtda.Frame, gFlag bool) {
+    	stack := frame.OperandStack()
+    	v2 := stack.PopFloat()
+    	v1 := stack.PopFloat()
+    	if v1 > v2 {
+    		stack.PushInt(1)
+    	} else if v1 == v2 {
+    		stack.PushInt(0)
+    	} else if v1 < v2 {
+    		stack.PushInt(-1)
+    	} else if gFlag {
+    		stack.PushInt(1)
+    	} else {
+    		stack.PushInt(-1)
+    	}
+    }
+
+    ```
+    
+    当两个float变量中至少有一个是NaN时，用fcmpg指令比较的结果是1，而用fcmpl指令比较的结果是-1。
+    
+    dcmpg和dcmpl指令用来比较double变量，在[dcmp.go](instructions/comparisons/dcmp.go)文件中，这两条指令和fcmpg、fcmpl指令除了比较的变量
+    类型不同之外，代码基本相同。
+    
+    - if<cond>指令
+    
+    在ch05/instructions/comparisons目录下创建[ifcond.go](instructions/comparisons/ifcond.go)文件，在其中定义if<cond>指令，代码如下
+    ```
+        // Branch if int comparison with zero succeeds 
+        // x==0
+        type IFEQ struct{ base.BranchInstruction }
+        // x != 0
+        type IFNE struct{ base.BranchInstruction }
+        // x < 0
+        type IFLT struct{ base.BranchInstruction }
+        // x > 0
+        type IFGT struct{ base.BranchInstruction }
+        // x <= 0
+        type IFLE struct{ base.BranchInstruction }
+        // x >= 0
+        type IFGE struct{ base.BranchInstruction }
+    ```
+    
+    - if_icmp<cond>指令
+    
+    在ch0\instructions\comparisons目录下创建[if_icmp.go](instructions/comparisons/if_icmp.go)
+    ```
+    // Branch if int comparison succeeds
+    type IF_ICMPEQ struct{ base.BranchInstruction }
+    type IF_ICMPNE struct{ base.BranchInstruction }
+    type IF_ICMPLT struct{ base.BranchInstruction }
+    type IF_ICMPLE struct{ base.BranchInstruction }
+    type IF_ICMPGT struct{ base.BranchInstruction }
+    type IF_ICMPGE struct{ base.BranchInstruction }
+    ```
+    
+    - if_acmp<cond>指令
+    
+    在ch05\instructions\comparisons目录下创建[if_acmp.go](instructions/comparisons/if_acmp.go)，在其中
+    定义两条if_acmp<cond>指令，代码如下
+    ```
+    // Branch if reference comparison succeeds
+    type IF_ACMPEQ struct{ base.BranchInstruction }
+    
+    type IF_ACMPNE struct{ base.BranchInstruction }
+    ```
+    
+- 控制指令
   
   
   
