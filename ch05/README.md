@@ -347,6 +347,44 @@
     ```
     
 - 控制指令
+
+    控制指令共有11条,jsr和ret指令在Java6之前用于实现finally子句，Java6之后已经不再使用这两条指令，所以不讨论这两条。
+    return系列指令有六条，用于从方法调用中返回，将在第7章讨论方法调用和返回时实现这六条指令。本节实现
+    剩下的3条指令：goto、tableswitch和lookupswitch。
+    - goto指令
+    
+    新建[goto.go](instructions/control/goto.go)文件，定义goto指令
+    
+    - tableswitch指令
+    
+    Java语言中的switch-case语句有两种实现方式：如果case值可以编码成索引表，则实现成tableswitch指令；否则实现成
+    lookupswitch指令。下面这个方法中的switch-case可以编译成tableswitch指令
+    ```
+    int chooseNear(int i) {
+        switch(1) {
+            case 0:return 0;
+            case 1:return 1;
+            case 2:return 2;
+            default:return -1;
+        }
+    }
+    ```
+    下面这个方法会变编译成lookupswitch指令
+    ```
+    int chooseFar(int i) {
+            switch(1) {
+                case -100:return -1;
+                case 0:return 0;
+                case 100:return 1;
+                default:return -1;
+            }
+        }
+    ```
+    
+    新建[tableswitch.go](instructions/control/tableswitch.go)文件，定义tableswitch指令
+    - lookupswitch指令
+    
+    新建[lookupswitch.go](instructions/control/lookupswitch.go)文件，定义lookupswitch指令
   
   
   
