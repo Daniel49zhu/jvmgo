@@ -418,6 +418,31 @@
     
     创建[goto_w.go](instructions/extended/goto_w.go)文件，goto_w指令和goto的唯一区别
     就是索引从2字节变成了4字节。
+- 解释器
+
+    本节将会实现一个简单的解释器。这个解释器目前只能执行一个Java方法，但是之后会不断进行完善，
+    创建[interpreter.go](interpreter.go)文件，在其中定义interpret方法，该方法的参数是MemberInfo指针，
+    调用MemberInfo结构体的CodeAttribute方法可以获取它的Code属性。
+    
+    得到Code属性之后可以进一步获得执行方法所需的局部变量表和操作数栈空间，以及方法的字节码。interpret
+    方法的其余代码先创建一个Thread实例，然后创建一个帧并把它推入Java虚拟机栈顶，最后执行方法。
+    
+- 测试代码
+    根据这段java代码通过javac生成class文件交由虚拟机处理
+    ```
+    public class GaussTest {
+    	public static void main(String[] args) {
+    		int sum = 0;
+    		for(int i = 0 ; i <= 100; i++) {
+    			sum += i;
+    		}
+    		System.out.println(sum);
+    	}	
+    }
+    ```
+    ![测试结果](images/test.jpg "测试结果")
+    观察局部变量表最后输出了5050
+    
   
   
   
