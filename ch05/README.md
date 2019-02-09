@@ -385,6 +385,39 @@
     - lookupswitch指令
     
     新建[lookupswitch.go](instructions/control/lookupswitch.go)文件，定义lookupswitch指令
+    
+- 扩展指令
+
+    扩展指令共6条。本书不讨论jsr_w指令和multianewarray指令用于创建多维数组，只实现剩下的4条指令。
+    
+    - wide指令
+    
+    加载类指令、存储类指令、ret指令和iinc指令需要按索引访问局部变量表，索引以uint8的形式存在
+    字节码中。对于大部分方法来说，局部变量表大小都不会超过256，所以用一字节来表示索引就够了。但如果
+    有方法对于局部变量表超过这个限制，因此Java虚拟机规范定义了wide指令扩展前述指令。
+    
+    新建[wide.go](instructions/extended/wide.go)文件，wide指令改变其他指令的行为，modifiedInstruction字段存放被
+    改变的指令。wide指令需要自己解码出modifiedInstruction。FetchOperands()方法先从字节码中读取一字节的
+    操作码，然后创建子指令，因为没有实现ret指令所以暂时调用painc，加载指令和存储指令都只有一个操作数，
+    需要扩展成2字节。
+    
+    wide只是增加索引宽度，并不改变子指令操作，所以其Execute只需调用子指令的Execute方法即可。
+    
+    - ifnull和ifnonnull指令
+    
+    创建[ifnull.go](instructions/extended/ifnull.go文件，在其中定义ifnull和ifnonnull指令
+    ```
+    // Branch if reference is null
+    type IFNULL struct{ base.BranchInstruction }
+    // Branch if reference not null
+    type IFNONNULL struct{ base.BranchInstruction }
+    ```
+    根据引用是否是null进行跳转，ifnull和ifnonnull指令把栈顶的引用弹出。
+    
+    - goto_w指令
+    
+    创建[goto_w.go](instructions/extended/goto_w.go)文件，goto_w指令和goto的唯一区别
+    就是索引从2字节变成了4字节。
   
   
   
