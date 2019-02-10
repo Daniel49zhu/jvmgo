@@ -9,3 +9,5 @@
 [第4章](ch04/README.md) 运行时数据区
 
 [第5章](ch05/README.md) 指令集和解释器
+
+[第6章](ch06/README.md) 类和对象
